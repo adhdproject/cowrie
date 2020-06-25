@@ -194,12 +194,11 @@ commands['printf'] = command_printf
 class command_exit(HoneyPotCommand):
 
     def call(self):
-        stat = failure.Failure(error.ProcessDone(status=""))
-        self.protocol.terminal.transport.processEnded(stat)
-        return
-
-    def exit(self):
-        pass
+        self.write("Connection to server closed.\n")
+        self.protocol.hostname = "localhost"
+        self.protocol.cwd = "/root"
+        if not self.fs.exists(self.protocol.cwd):
+            self.protocol.cwd = '/'
 
 
 commands['exit'] = command_exit
